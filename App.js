@@ -1,24 +1,36 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import { createAppContainer } from "react-navigation";
+import { createBottomTabNavigator } from "react-navigation-tabs";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+import HomeScreen from "./src/screens/HomeScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
+import SearchScreen from "./src/screens/SearchScreen";
+import TickerScreen from "./src/screens/TickerScreen";
+
+import { Provider as NewsProvider } from "./src/context/NewsContext";
+
+const navigator = createBottomTabNavigator(
+  {
+    Home: HomeScreen,
+    Search: SearchScreen,
+    TickerScreen: TickerScreen,
+    Profile: ProfileScreen,
   },
-});
+  {
+    initialRouteName: "Home",
+    defualtNavigationOptions: {
+      title: "News",
+    },
+  }
+);
 
-// import {createAppContainer } from 'react-navigation';
-// import { createStackNavigator } from 'react-navigation-stack';
+const App = createAppContainer(navigator);
+
+export default () => {
+  return (
+    <NewsProvider>
+      <App />
+    </NewsProvider>
+  );
+};

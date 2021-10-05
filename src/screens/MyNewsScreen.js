@@ -5,13 +5,13 @@ import { Context as NewsContext } from "../context/NewsContext";
 
 import NewsBox from "../components/NewsBox";
 
-const HomeScreen = ({ navigation }) => {
-  const { data, fetchNews, addNews } = useContext(NewsContext);
+const MyNewsScreen = ({ navigation }) => {
+  const { data, showNews, deleteNews } = useContext(NewsContext);
 
   useEffect(() => {
-    fetchNews();
+    showNews();
     const listener = navigation.addListener("didFocus", () => {
-      fetchNews();
+      showNews();
     });
     //runs when we get rid of the index screen completely
     return () => {
@@ -20,31 +20,30 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   const items = ({ item }) => {
-    if (!item.author) {
+    if (!item.publishedAt) {
       return null;
     }
     return (
       <NewsBox
         item={item}
-        showIcon={true}
-        onAdd={() => addNews(item, () => navigation.navigate("MyNewsScreen"))}
+        showIcon={false}
+        onDelete={() => deleteNews(item.id)}
       />
     );
   };
 
-  // console.log(data);
   return (
     <SafeAreaView>
-      <Text>HomeScreen</Text>
+      <Text>MyNewsScreen</Text>
       <FlatList
         data={data}
-        keyExtractor={(item) => item.url}
+        keyExtractor={(item) => item.publishedAt}
         renderItem={items}
       />
     </SafeAreaView>
   );
 };
 
-export default HomeScreen;
+export default MyNewsScreen;
 
 const styles = StyleSheet.create({});
